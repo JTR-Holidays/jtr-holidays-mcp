@@ -28,8 +28,9 @@ JTR Holidays is a Dubai-based global travel platform rated **5 stars on Trustpil
 ```
 POST https://api.jtrholidays.com/mcp/v1
 Content-Type: application/json
-x-jtr-aihub-secret: <your-secret-key>
 ```
+
+> No API key needed. All five browse/search tools are publicly accessible.
 
 ### Auto-discovery (no auth required)
 
@@ -81,16 +82,37 @@ All tool calls use the `tools/call` method:
 
 ## Authentication
 
-Every request to `POST /mcp/v1` must include the secret header:
+This server uses a **two-tier access model**:
+
+### Tier 1 — Public (no authentication required)
+
+All five current tools are publicly accessible. No API key, no sign-up, no waiting.
 
 | Header | Value |
 |--------|-------|
-| `x-jtr-aihub-secret` | Your secret key |
 | `Content-Type` | `application/json` |
 
-To request API access, contact us at [it@jtrholidays.com](mailto:it@jtrholidays.com) or visit [jtrholidays.com/contact-us](https://www.jtrholidays.com/contact-us).
+Rate limit: **100 requests/minute per IP**.
 
-> The discovery endpoint (`GET /.well-known/mcp.json`) is public and requires no authentication.
+```
+POST https://api.jtrholidays.com/mcp/v1
+Content-Type: application/json
+```
+
+### Tier 2 — Protected (future write tools)
+
+Future write and mutation tools (e.g. `create_booking`, `update_inventory`) will require a secret header. These tools do not exist yet.
+
+| Header | Value |
+|--------|-------|
+| `X-MCP-Secret` | Your secret key |
+| `Content-Type` | `application/json` |
+
+Rate limit: **1000 requests/minute per IP** for authenticated callers.
+
+To request authenticated access for integrations, contact us at [it@jtrholidays.com](mailto:it@jtrholidays.com).
+
+> The discovery endpoint (`GET /.well-known/mcp.json`) is always public.
 
 ---
 
